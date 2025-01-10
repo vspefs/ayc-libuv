@@ -1,0 +1,17 @@
+.{
+    .name = "ayc-libuv",
+    .version = "0.0.0",
+
+    .dependencies = .{
+        .src = .{
+            .url = "git+https://github.com/libuv/libuv#e59e2a9e49c96feffebdfd44915320e32a91a957",
+            .hash = "1220a688c4d1a764bf27282baa0a12c43aac2bd2ce766a4d44a9f884c7304dafd1c0",
+        },
+    },
+
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "LICENSE",
+    },
+}

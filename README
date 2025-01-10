@@ -1,0 +1,6 @@
+I build libuv with Zig build system. You fetch it and use it in your Zig build system.
+
+Sanitizers not usable. I'm lazy and I'm sorry. Should fix that later.
+
+Should be working on Linux and Windows.
+Take care of the platform-specific macros yourself. Like `_GNU_SOURCE` on Linux.
