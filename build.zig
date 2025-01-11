@@ -41,7 +41,7 @@ pub fn build(b: *std.Build) !void {
         defines.items,
     });
 
-    var mod = b.addModule("libuv", .{
+    var mod = b.addModule("source", .{
         .optimize = optimize,
         .target = target,
         .link_libc = true,
@@ -149,6 +149,22 @@ pub fn build(b: *std.Build) !void {
             });
         }
     }
+
+    b.addNamedLazyPath("include", dep.path("include"));
+
+    const static = b.addStaticLibrary(.{
+        .name = "static",
+        .root_module = mod,
+    });
+    static.installHeadersDirectory(dep.path("include"), "", .{});
+    b.installArtifact(static);
+
+    const shared = b.addSharedLibrary(.{
+        .name = "shared",
+        .root_module = mod,
+    });
+    shared.installHeadersDirectory(dep.path("include"), "", .{});
+    b.installArtifact(shared);
 }
 
 const std = @import("std");
