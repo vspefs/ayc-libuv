@@ -11,8 +11,6 @@ pub fn build(b: *std.Build) !void {
     const optimize = b.standardOptimizeOption(.{});
 
     const dep = b.dependency("src", .{});
-    const build_static = b.option(bool, "static", "build static library (default: true)") orelse false;
-    const build_shared = b.option(bool, "shared", "build shared library (default: false)") orelse false;
 
     var defines = std.ArrayList([]const u8).init(alloc);
     var cargs = std.ArrayList([]const u8).init(alloc);
@@ -43,7 +41,7 @@ pub fn build(b: *std.Build) !void {
         defines.items,
     });
 
-    var mod = b.createModule(.{
+    var mod = b.addModule("libuv", .{
         .optimize = optimize,
         .target = target,
         .link_libc = true,
@@ -150,24 +148,6 @@ pub fn build(b: *std.Build) !void {
                 .root = dep.path("src/unix"),
             });
         }
-    }
-
-    if (build_static) {
-        const static = b.addStaticLibrary(.{
-            .name = "uv",
-            .root_module = mod,
-        });
-        static.installHeadersDirectory(dep.path("include"), "", .{});
-        b.getInstallStep().dependOn(&b.addInstallArtifact(static, .{}).step);
-    }
-
-    if (build_shared) {
-        const shared = b.addSharedLibrary(.{
-            .name = "uv",
-            .root_module = mod,
-        });
-        shared.installHeadersDirectory(dep.path("include"), "", .{});
-        b.getInstallStep().dependOn(&b.addInstallArtifact(shared, .{}).step);
     }
 }
 
